@@ -49,6 +49,11 @@
 - **Spacing:** Use intentional, consistent spacing tokens — not random Tailwind steps.
 - **Depth:** Surfaces should have a layering system (base → elevated → floating), not all sit at the same z-plane.
 
+## GitHub & Deployment
+- **Never push to GitHub unless explicitly told to.** Only push when the user says something like "push it", "push to GitHub", or "deploy".
+- Do not push after every code change — changes stay local until the user asks.
+- When pushing: `git add`, `git commit`, `git push origin master:main`. Branch is `master` locally, `main` on GitHub.
+
 ## Hard Rules
 - Do not add sections, features, or content not in the reference
 - Do not "improve" a reference design — match it

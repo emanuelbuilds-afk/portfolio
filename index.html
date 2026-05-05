@@ -9,14 +9,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --brand:#E11B22;
-    --brand-dark:#B41319;
-    --cream:#F5E9D2;
-    --cream-2:#FAF1DD;
-    --ink:#1A1A1A;
-    --paper:#F1E5C9;
-  }
+  :root{--brand:#E11B22;--brand-dark:#B41319;--cream:#F5E9D2;--cream-2:#FAF1DD;--ink:#1A1A1A;--paper:#F1E5C9;}
+  html{scroll-behavior:smooth;}
   html,body{background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;}
   .font-display{font-family:'Playfair Display',serif;letter-spacing:-0.02em;}
   .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 1.5rem;border-radius:9999px;font-weight:600;font-size:.9rem;transition:transform .2s ease, box-shadow .2s ease, background-color .2s ease;}
@@ -40,17 +34,27 @@
   .nav-link::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:var(--brand);transform:scaleX(0);transform-origin:left;transition:transform .25s ease;}
   .nav-link:hover::after{transform:scaleX(1);}
   .underline-curl{text-decoration:underline;text-decoration-color:var(--brand);text-decoration-thickness:3px;text-underline-offset:6px;}
-  .ig-tile{position:relative;overflow:hidden;border-radius:14px;}
-  .ig-tile img{transition:transform .5s ease;}
-  .ig-tile:hover img{transform:scale(1.05);}
   .star{color:#F5B400;}
   .dot{width:6px;height:6px;border-radius:9999px;background:currentColor;display:inline-block;}
-  .calendar-day{display:flex;align-items:center;justify-content:center;height:38px;border-radius:8px;font-size:.85rem;color:#ddd;}
+  .calendar-day{display:flex;align-items:center;justify-content:center;height:38px;border-radius:8px;font-size:.85rem;color:#ddd;cursor:pointer;}
   .calendar-day.active{background:var(--brand);color:#fff;font-weight:600;}
-  .calendar-day.muted{color:#555;}
+  .calendar-day.muted{color:#555;cursor:default;pointer-events:none;}
+  .calendar-day:not(.muted):hover{background:rgba(255,255,255,0.1);}
   .section-title{font-family:'Playfair Display',serif;font-weight:700;letter-spacing:-0.02em;}
   .footer-link{color:#cfcfcf;font-size:.85rem;}
   .footer-link:hover{color:#fff;}
+  .custom-select{position:relative;}
+  .cs-trigger{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 16px;font-size:.875rem;color:#fff;cursor:pointer;transition:background .2s ease;}
+  .cs-trigger:hover{background:rgba(255,255,255,.15);}
+  .cs-menu{display:none;position:absolute;top:calc(100% + 6px);left:0;right:0;background:#2d2d2d;border:1px solid rgba(255,255,255,.15);border-radius:12px;overflow:hidden;z-index:200;list-style:none;margin:0;padding:4px;box-shadow:0 8px 24px rgba(0,0,0,.5);}
+  .custom-select.open .cs-menu{display:block;}
+  .cs-option{padding:10px 14px;font-size:.875rem;color:#ccc;border-radius:8px;cursor:pointer;transition:background .15s ease, color .15s ease;}
+  .cs-option:hover{background:rgba(255,255,255,.1);color:#fff;}
+  .cs-option.cs-active{background:var(--brand);color:#fff;}
+  .cs-arrow{font-size:.75rem;opacity:.5;margin-left:8px;transition:transform .2s ease;}
+  .custom-select.open .cs-arrow{transform:rotate(180deg);}
+  .lang-btn{border:none;cursor:pointer;background:transparent;color:#fff;transition:background .2s ease, color .2s ease, opacity .2s ease;}
+  .lang-btn.active-lang{background:var(--brand);color:#fff;}
 </style>
 </head>
 <body class="antialiased paper-noise">
@@ -61,12 +65,15 @@
     <div class="flex items-center gap-4 opacity-80">
       <span>📍 Cluj-Napoca</span>
       <span class="hidden sm:inline">·</span>
-      <span class="hidden sm:inline">L–D: 09:00 – 23:00</span>
+      <span class="hidden sm:inline" data-i18n="bar-hours">L–D: 09:00 – 23:00</span>
     </div>
     <div class="flex items-center gap-4 opacity-80">
-      <a href="#" class="hover:text-white">Contact</a>
-      <a href="#" class="hover:text-white">Cariere</a>
-      <a href="#" class="hover:text-white">RO / EN</a>
+      <a href="#" class="hover:text-white" data-i18n="bar-contact">Contact</a>
+      <a href="#" class="hover:text-white" data-i18n="bar-careers">Cariere</a>
+      <div class="flex items-center gap-0.5 bg-white/10 rounded-full p-0.5 ml-1">
+        <button id="lang-ro" class="lang-btn active-lang px-3 py-0.5 rounded-full text-xs font-semibold">RO</button>
+        <button id="lang-en" class="lang-btn px-3 py-0.5 rounded-full text-xs font-semibold opacity-50">EN</button>
+      </div>
     </div>
   </div>
 </div>
@@ -75,17 +82,16 @@
 <header class="bg-[var(--paper)]/95 backdrop-blur border-b border-black/5 sticky top-0 z-40">
   <div class="max-w-7xl mx-auto px-6 h-20 grid grid-cols-3 items-center">
     <nav class="hidden md:flex items-center gap-7 text-[var(--ink)]">
-      <a class="nav-link" href="#">Acasă</a>
-      <a class="nav-link" href="#">Restaurante</a>
-      <a class="nav-link" href="#">Meniu</a>
+      <a class="nav-link" href="#" data-i18n="nav-home">Acasă</a>
+      <a class="nav-link" href="#" data-i18n="nav-menu">Meniu</a>
     </nav>
     <a href="#" class="justify-self-center flex flex-col items-center leading-none">
       <span class="font-display text-3xl tracking-tight text-[var(--brand)]">your</span>
       <span class="text-[10px] tracking-[0.3em] text-[var(--ink)]/70 mt-0.5">RESTAURANT</span>
     </a>
     <div class="hidden md:flex items-center gap-3 justify-self-end">
-      <a href="#" class="nav-link">Rezervări</a>
-      <a href="#" class="btn btn-red">Comandă online</a>
+      <a href="#rezerva-online" class="nav-link" data-i18n="nav-reservations">Rezervări</a>
+      <a href="#" class="btn btn-red" data-i18n="nav-order">Comandă online</a>
     </div>
     <button class="md:hidden justify-self-end" aria-label="Menu">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
@@ -97,20 +103,20 @@
 <section class="relative overflow-hidden grain">
   <div class="max-w-7xl mx-auto px-6 pt-14 pb-20 grid lg:grid-cols-12 gap-10 items-center">
     <div class="lg:col-span-6 relative z-10">
-      <span class="chip text-xl">~ proaspăt &amp; gustos ~</span>
-      <h1 class="font-display text-5xl sm:text-6xl lg:text-7xl mt-4 leading-[1.02]">
+      <span class="chip text-xl" data-i18n="hero-chip">~ proaspăt &amp; gustos ~</span>
+      <h1 class="font-display text-5xl sm:text-6xl lg:text-7xl mt-4 leading-[1.02]" data-i18n="hero-h1">
         Îți facem<br/>toate <span class="text-[var(--brand)] italic">poftele!</span>
       </h1>
-      <p class="mt-6 text-base sm:text-lg text-black/70 max-w-md leading-relaxed">
+      <p class="mt-6 text-base sm:text-lg text-black/70 max-w-md leading-relaxed" data-i18n="hero-p">
         De la mic dejun la cină târzie — bucate gătite cu grijă, ingrediente locale și aroma casei, în inima Clujului.
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
-        <a href="#" class="btn btn-red">Comandă acum</a>
-        <a href="#" class="btn btn-outline">Vezi meniul</a>
+        <a href="#" class="btn btn-red" data-i18n="hero-btn-order">Comandă acum</a>
+        <a href="#" class="btn btn-outline" data-i18n="hero-btn-menu">Vezi meniul</a>
       </div>
       <div class="mt-10 flex items-center gap-6 text-sm text-black/60">
-        <div class="flex items-center gap-2"><span class="star">★★★★★</span><span>4.9 / 5 pe Google</span></div>
-        <div class="hidden sm:flex items-center gap-2"><span class="dot text-[var(--brand)]"></span>Peste 12 locații</div>
+        <div class="flex items-center gap-2"><span class="star">★★★★★</span><span data-i18n="hero-rating">4.9 / 5 pe Google</span></div>
+        <div class="hidden sm:flex items-center gap-2"><span class="dot text-[var(--brand)]"></span><span data-i18n="hero-locations">Peste 12 locații</span></div>
       </div>
     </div>
     <div class="lg:col-span-6 relative">
@@ -124,12 +130,12 @@
           <span class="font-display text-xl mt-0.5">04</span>
         </div>
         <div>
-          <div class="text-[10px] uppercase tracking-[0.18em] text-[var(--brand)] font-bold">★ Meniul zilei</div>
-          <div class="font-semibold text-sm leading-tight mt-0.5">Burger &amp; cartofi — doar azi 39 lei</div>
+          <div class="text-[10px] uppercase tracking-[0.18em] text-[var(--brand)] font-bold" data-i18n="hero-badge-label">★ Meniul zilei</div>
+          <div class="font-semibold text-sm leading-tight mt-0.5" data-i18n="hero-badge-text">Burger &amp; cartofi — doar azi 39 lei</div>
         </div>
       </div>
       <div class="absolute -right-4 top-8 bg-[var(--cream)] rounded-2xl px-4 py-3 ring-soft hidden sm:block">
-        <div class="text-xs text-black/50">Livrare în</div>
+        <div class="text-xs text-black/50" data-i18n="hero-delivery-label">Livrare în</div>
         <div class="font-display text-2xl text-[var(--brand)]">~30 min</div>
       </div>
     </div>
@@ -141,21 +147,21 @@
   <div class="grid md:grid-cols-5 gap-6">
     <article class="md:col-span-2 relative rounded-[28px] overflow-hidden bg-[var(--cream)] p-10 min-h-[360px] flex flex-col justify-between card-shadow">
       <div>
-        <span class="chip text-base">~ rapid la tine ~</span>
+        <span class="chip text-base" data-i18n="promo1-chip">~ rapid la tine ~</span>
         <h3 class="font-display text-5xl mt-2 leading-none">YOUR<br/><span class="text-[var(--brand)]">Delivery</span></h3>
-        <p class="mt-4 text-black/70 max-w-xs">Comandă favoritele tale și le aducem fierbinți, în 30 de minute.</p>
+        <p class="mt-4 text-black/70 max-w-xs" data-i18n="promo1-p">Comandă favoritele tale și le aducem fierbinți, în 30 de minute.</p>
       </div>
-      <a href="#" class="btn btn-red self-start mt-6">Comandă online</a>
+      <a href="#" class="btn btn-red self-start mt-6" data-i18n="promo1-btn">Comandă online</a>
     </article>
     <article class="md:col-span-3 relative rounded-[28px] overflow-hidden bg-[var(--brand)] text-white p-10 min-h-[360px] flex flex-col justify-between card-shadow">
       <img src="replacing-images/image.png" alt="" class="absolute right-0 top-0 h-full w-3/5 object-cover"/>
       <div class="absolute inset-0 bg-gradient-to-r from-[var(--brand)] from-30% via-[var(--brand)]/85 via-50% to-transparent to-80%"></div>
       <div class="relative z-10">
-        <span class="font-display italic text-base text-white/80">~ momente împreună ~</span>
-        <h3 class="font-display text-5xl mt-2 leading-none">EȘTI<br/>acolo cu <em class="not-italic underline-curl">familia</em></h3>
-        <p class="mt-4 text-white/80 max-w-xs">Meniuri pentru cei mici, spațiu prietenos și gustul pe care-l știe toată familia.</p>
+        <span class="font-display italic text-base text-white/80" data-i18n="promo2-chip">~ momente împreună ~</span>
+        <h3 class="font-display text-5xl mt-2 leading-none" data-i18n="promo2-h3">EȘTI<br/>acolo cu <em class="not-italic underline-curl">familia</em></h3>
+        <p class="mt-4 text-white/80 max-w-xs" data-i18n="promo2-p">Meniuri pentru cei mici, spațiu prietenos și gustul pe care-l știe toată familia.</p>
       </div>
-      <a href="#" class="btn btn-white self-start mt-6 relative z-10">Rezervă o masă</a>
+      <a href="#rezerva-online" class="btn btn-white self-start mt-6 relative z-10" data-i18n="promo2-btn">Rezervă o masă</a>
     </article>
   </div>
 </section>
@@ -163,17 +169,16 @@
 <!-- Locul preferat -->
 <section class="max-w-7xl mx-auto px-6 pb-24 grid lg:grid-cols-12 gap-10 items-center">
   <div class="lg:col-span-5">
-    <span class="chip text-lg">~ de peste 20 de ani ~</span>
-    <h2 class="section-title text-5xl lg:text-6xl mt-3 leading-[1.05]">Locul preferat<br/>al <span class="text-[var(--brand)]">clujenilor</span>.</h2>
-    <p class="mt-6 text-black/70 leading-relaxed max-w-md">
+    <span class="chip text-lg" data-i18n="about-chip">~ de peste 20 de ani ~</span>
+    <h2 class="section-title text-5xl lg:text-6xl mt-3 leading-[1.05]" data-i18n="about-h2">Locul preferat<br/>al <span class="text-[var(--brand)]">clujenilor</span>.</h2>
+    <p class="mt-6 text-black/70 leading-relaxed max-w-md" data-i18n="about-p">
       Your Restaurant înseamnă mese pline, prieteni la pahar și rețete duse mai departe din generație în generație. Treci pe la noi — te așteaptă mereu un loc cald.
     </p>
     <div class="mt-8 grid grid-cols-3 gap-6 max-w-md">
-      <div><div class="font-display text-3xl text-[var(--brand)]">12+</div><div class="text-xs text-black/60 mt-1">Locații în Cluj</div></div>
-      <div><div class="font-display text-3xl text-[var(--brand)]">200k</div><div class="text-xs text-black/60 mt-1">Clienți / an</div></div>
-      <div><div class="font-display text-3xl text-[var(--brand)]">4.9★</div><div class="text-xs text-black/60 mt-1">Rating Google</div></div>
+      <div><div class="font-display text-3xl text-[var(--brand)]">12+</div><div class="text-xs text-black/60 mt-1" data-i18n="about-stat1">Locații în Cluj</div></div>
+      <div><div class="font-display text-3xl text-[var(--brand)]">200k</div><div class="text-xs text-black/60 mt-1" data-i18n="about-stat2">Clienți / an</div></div>
+      <div><div class="font-display text-3xl text-[var(--brand)]">4.9★</div><div class="text-xs text-black/60 mt-1" data-i18n="about-stat3">Rating Google</div></div>
     </div>
-    <a href="#" class="btn btn-outline mt-8">Despre noi</a>
   </div>
   <div class="lg:col-span-7">
     <div class="relative rounded-[28px] overflow-hidden card-shadow">
@@ -184,41 +189,60 @@
 </section>
 
 <!-- Rezervă online -->
-<section class="bg-[var(--ink)] text-white">
+<section id="rezerva-online" class="bg-[var(--ink)] text-white">
   <div class="max-w-7xl mx-auto px-6 py-20 grid lg:grid-cols-12 gap-10 items-center">
     <div class="lg:col-span-5">
-      <span class="chip text-lg">~ simplu &amp; rapid ~</span>
-      <h2 class="section-title text-5xl lg:text-6xl mt-3 leading-[1.05]">Rezervă<br/><span class="text-[var(--brand)]">online.</span></h2>
-      <p class="mt-6 text-white/70 max-w-md">Alege restaurantul, ziua și ora — îți confirmăm masa în câteva secunde.</p>
-      <a href="#" class="btn btn-red mt-8">Rezervă acum</a>
+      <span class="chip text-lg" data-i18n="book-chip">~ simplu &amp; rapid ~</span>
+      <h2 class="section-title text-5xl lg:text-6xl mt-3 leading-[1.05]" data-i18n="book-h2">Rezervă<br/><span class="text-[var(--brand)]">online.</span></h2>
+      <p class="mt-6 text-white/70 max-w-md" data-i18n="book-p">Alege restaurantul, ziua și ora — îți confirmăm masa în câteva secunde.</p>
+      <a href="#" class="btn btn-red mt-8" data-i18n="book-btn">Rezervă acum</a>
     </div>
     <div class="lg:col-span-7">
       <div class="bg-white/5 backdrop-blur rounded-[24px] p-6 border border-white/10">
         <div class="flex items-center justify-between mb-4">
           <div>
-            <div class="text-xs text-white/50">Mai 2026</div>
-            <div class="font-display text-2xl">Alege ziua</div>
+            <div id="cal-month-label" class="text-xs text-white/50"></div>
+            <div class="font-display text-2xl" data-i18n="cal-pick-day">Alege ziua</div>
           </div>
           <div class="flex gap-2">
-            <button class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20">‹</button>
-            <button class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20">›</button>
+            <button id="cal-prev" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 transition-colors duration-200">‹</button>
+            <button id="cal-next" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 transition-colors duration-200">›</button>
           </div>
         </div>
         <div class="grid grid-cols-7 gap-1 text-center text-[11px] text-white/40 mb-2">
           <div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div><div>D</div>
         </div>
-        <div class="grid grid-cols-7 gap-1">
-          <div class="calendar-day muted">27</div><div class="calendar-day muted">28</div><div class="calendar-day muted">29</div><div class="calendar-day muted">30</div>
-          <div class="calendar-day">1</div><div class="calendar-day">2</div><div class="calendar-day">3</div>
-          <div class="calendar-day active">4</div><div class="calendar-day">5</div><div class="calendar-day">6</div><div class="calendar-day">7</div><div class="calendar-day">8</div><div class="calendar-day">9</div><div class="calendar-day">10</div>
-          <div class="calendar-day">11</div><div class="calendar-day">12</div><div class="calendar-day">13</div><div class="calendar-day">14</div><div class="calendar-day">15</div><div class="calendar-day">16</div><div class="calendar-day">17</div>
-          <div class="calendar-day">18</div><div class="calendar-day">19</div><div class="calendar-day">20</div><div class="calendar-day">21</div><div class="calendar-day">22</div><div class="calendar-day">23</div><div class="calendar-day">24</div>
-          <div class="calendar-day">25</div><div class="calendar-day">26</div><div class="calendar-day">27</div><div class="calendar-day">28</div><div class="calendar-day">29</div><div class="calendar-day">30</div><div class="calendar-day">31</div>
-        </div>
+        <div id="cal-grid" class="grid grid-cols-7 gap-1"></div>
         <div class="mt-6 grid sm:grid-cols-3 gap-3">
-          <select class="bg-white/10 rounded-xl px-4 py-3 text-sm border border-white/10"><option>Your Centru</option><option>Your Iulius</option><option>Your Mănăștur</option></select>
-          <select class="bg-white/10 rounded-xl px-4 py-3 text-sm border border-white/10"><option>2 persoane</option><option>4 persoane</option><option>6 persoane</option></select>
-          <select class="bg-white/10 rounded-xl px-4 py-3 text-sm border border-white/10"><option>19:00</option><option>19:30</option><option>20:00</option></select>
+          <div class="custom-select" id="cs-location">
+            <div class="cs-trigger"><span class="cs-label">Your Centru</span><span class="cs-arrow">▾</span></div>
+            <ul class="cs-menu">
+              <li class="cs-option cs-active">Your Centru</li>
+              <li class="cs-option">Your Iulius</li>
+              <li class="cs-option">Your Mănăștur</li>
+            </ul>
+          </div>
+          <div class="custom-select" id="cs-people">
+            <div class="cs-trigger"><span class="cs-label">2 persoane</span><span class="cs-arrow">▾</span></div>
+            <ul class="cs-menu">
+              <li class="cs-option cs-active">2 persoane</li>
+              <li class="cs-option">4 persoane</li>
+              <li class="cs-option">6 persoane</li>
+              <li class="cs-option">8+ persoane</li>
+            </ul>
+          </div>
+          <div class="custom-select" id="cs-time">
+            <div class="cs-trigger"><span class="cs-label">19:00</span><span class="cs-arrow">▾</span></div>
+            <ul class="cs-menu">
+              <li class="cs-option">18:00</li>
+              <li class="cs-option">18:30</li>
+              <li class="cs-option cs-active">19:00</li>
+              <li class="cs-option">19:30</li>
+              <li class="cs-option">20:00</li>
+              <li class="cs-option">20:30</li>
+              <li class="cs-option">21:00</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -229,13 +253,13 @@
 <section class="bg-[var(--cream-2)]">
   <div class="max-w-7xl mx-auto px-6 py-24">
     <div class="text-center mb-12">
-      <span class="chip text-lg">~ ce spun clienții ~</span>
-      <h2 class="section-title text-5xl lg:text-6xl mt-2">Recenzii <span class="text-[var(--brand)]">clienți</span>.</h2>
+      <span class="chip text-lg" data-i18n="rev-chip">~ ce spun clienții ~</span>
+      <h2 class="section-title text-5xl lg:text-6xl mt-2" data-i18n="rev-h2">Recenzii <span class="text-[var(--brand)]">clienți</span>.</h2>
     </div>
     <div class="grid md:grid-cols-3 gap-6">
       <figure class="bg-[#FFFAF0] rounded-2xl p-6 ring-soft">
         <div class="star text-lg">★★★★★</div>
-        <blockquote class="mt-3 text-black/80 leading-relaxed">„Mâncare excelentă, atmosferă de casă. Ne întoarcem de fiecare dată cu plăcere.”</blockquote>
+        <blockquote class="mt-3 text-black/80 leading-relaxed" data-i18n="rev1-q">„Mâncare excelentă, atmosferă de casă. Ne întoarcem de fiecare dată cu plăcere."</blockquote>
         <figcaption class="mt-5 flex items-center gap-3">
           <img src="https://placehold.co/80x80/E11B22/FFFFFF/png?text=A" class="w-10 h-10 rounded-full" alt=""/>
           <div><div class="font-semibold text-sm">Andreea M.</div><div class="text-xs text-black/50">Cluj-Napoca</div></div>
@@ -243,7 +267,7 @@
       </figure>
       <figure class="bg-[#FFFAF0] rounded-2xl p-6 ring-soft">
         <div class="star text-lg">★★★★★</div>
-        <blockquote class="mt-3 text-black/80 leading-relaxed">„Cele mai bune sarmale din Cluj, fără doar și poate. Servire prietenoasă și rapidă.”</blockquote>
+        <blockquote class="mt-3 text-black/80 leading-relaxed" data-i18n="rev2-q">„Cele mai bune sarmale din Cluj, fără doar și poate. Servire prietenoasă și rapidă."</blockquote>
         <figcaption class="mt-5 flex items-center gap-3">
           <img src="https://placehold.co/80x80/1A1A1A/FFFFFF/png?text=R" class="w-10 h-10 rounded-full" alt=""/>
           <div><div class="font-semibold text-sm">Radu P.</div><div class="text-xs text-black/50">Cluj-Napoca</div></div>
@@ -251,7 +275,7 @@
       </figure>
       <figure class="bg-[#FFFAF0] rounded-2xl p-6 ring-soft">
         <div class="star text-lg">★★★★★</div>
-        <blockquote class="mt-3 text-black/80 leading-relaxed">„Am organizat botezul aici și a fost perfect. Mulțumim echipei Your Restaurant!”</blockquote>
+        <blockquote class="mt-3 text-black/80 leading-relaxed" data-i18n="rev3-q">„Am organizat botezul aici și a fost perfect. Mulțumim echipei Your Restaurant!"</blockquote>
         <figcaption class="mt-5 flex items-center gap-3">
           <img src="https://placehold.co/80x80/F5E9D2/E11B22/png?text=I" class="w-10 h-10 rounded-full" alt=""/>
           <div><div class="font-semibold text-sm">Ioana &amp; Vlad</div><div class="text-xs text-black/50">Florești</div></div>
@@ -261,10 +285,10 @@
   </div>
 </section>
 
-<!-- Sponsors / parteneri -->
+<!-- Sponsors -->
 <section class="border-t border-black/10">
   <div class="max-w-7xl mx-auto px-6 py-10">
-    <div class="text-center text-xs uppercase tracking-[0.3em] text-black/50 mb-6">Parteneri &amp; sponsori</div>
+    <div class="text-center text-xs uppercase tracking-[0.3em] text-black/50 mb-6" data-i18n="sponsors-label">Parteneri &amp; sponsori</div>
     <div class="marquee">
       <div class="marquee-track items-center text-black/40 font-display text-2xl italic">
         <span>Stejarii</span><span>·</span><span>Nu Răzbi</span><span>·</span><span>Local Roast</span><span>·</span><span>Cluj Hub</span><span>·</span><span>Brutăria Veche</span><span>·</span><span>Vinul Casei</span><span>·</span>
@@ -280,15 +304,24 @@
     <div>
       <div class="font-display text-3xl text-[var(--brand)] leading-none">your</div>
       <div class="text-[10px] tracking-[0.3em] text-white/60 mt-1">RESTAURANT</div>
-      <p class="text-white/60 text-sm mt-5 leading-relaxed">Locul preferat al clujenilor. Bucate gătite cu grijă, în inima orașului.</p>
+      <p class="text-white/60 text-sm mt-5 leading-relaxed" data-i18n="footer-tagline">Locul preferat al clujenilor. Bucate gătite cu grijă, în inima orașului.</p>
     </div>
     <div>
       <div class="text-xs uppercase tracking-widest text-white/50 mb-4">Your Restaurant</div>
-      <ul class="space-y-2"><li><a class="footer-link" href="#">Despre noi</a></li><li><a class="footer-link" href="#">Restaurante</a></li><li><a class="footer-link" href="#">Cariere</a></li></ul>
+      <ul class="space-y-2">
+        <li><a class="footer-link" href="#" data-i18n="footer-link-about">Despre noi</a></li>
+        <li><a class="footer-link" href="#" data-i18n="footer-link-restaurants">Restaurante</a></li>
+        <li><a class="footer-link" href="#" data-i18n="footer-link-careers">Cariere</a></li>
+      </ul>
     </div>
     <div>
-      <div class="text-xs uppercase tracking-widest text-white/50 mb-4">Servicii</div>
-      <ul class="space-y-2"><li><a class="footer-link" href="#">Comandă online</a></li><li><a class="footer-link" href="#">Rezervări</a></li><li><a class="footer-link" href="#">Evenimente</a></li><li><a class="footer-link" href="#">Catering</a></li></ul>
+      <div class="text-xs uppercase tracking-widest text-white/50 mb-4" data-i18n="footer-col2-title">Servicii</div>
+      <ul class="space-y-2">
+        <li><a class="footer-link" href="#" data-i18n="footer-link-order">Comandă online</a></li>
+        <li><a class="footer-link" href="#" data-i18n="footer-link-reservations">Rezervări</a></li>
+        <li><a class="footer-link" href="#" data-i18n="footer-link-events">Evenimente</a></li>
+        <li><a class="footer-link" href="#">Catering</a></li>
+      </ul>
     </div>
     <div>
       <div class="text-xs uppercase tracking-widest text-white/50 mb-4">Contact</div>
@@ -306,11 +339,213 @@
   </div>
   <div class="border-t border-white/10">
     <div class="max-w-7xl mx-auto px-6 py-5 flex flex-wrap items-center justify-between text-xs text-white/50">
-      <div>© 2026 Your Restaurant. Toate drepturile rezervate.</div>
-      <div class="flex gap-5"><a class="footer-link" href="#">Termeni</a><a class="footer-link" href="#">Confidențialitate</a><a class="footer-link" href="#">Cookies</a></div>
+      <div data-i18n="footer-copyright">© 2026 Your Restaurant. Toate drepturile rezervate.</div>
+      <div class="flex gap-5">
+        <a class="footer-link" href="#" data-i18n="footer-terms">Termeni</a>
+        <a class="footer-link" href="#" data-i18n="footer-privacy">Confidențialitate</a>
+        <a class="footer-link" href="#">Cookies</a>
+      </div>
     </div>
   </div>
 </footer>
 
+<script>
+(function(){
+  var T = {
+    ro: {
+      months: ['Ianuarie','Februarie','Martie','Aprilie','Mai','Iunie','Iulie','August','Septembrie','Octombrie','Noiembrie','Decembrie'],
+      'bar-hours': 'L–D: 09:00 – 23:00',
+      'bar-contact': 'Contact',
+      'bar-careers': 'Cariere',
+      'nav-home': 'Acasă',
+      'nav-menu': 'Meniu',
+      'nav-reservations': 'Rezervări',
+      'nav-order': 'Comandă online',
+      'hero-chip': '~ proaspăt &amp; gustos ~',
+      'hero-h1': 'Îți facem<br/>toate <span class="text-[var(--brand)] italic">poftele!</span>',
+      'hero-p': 'De la mic dejun la cină târzie — bucate gătite cu grijă, ingrediente locale şi aroma casei, în inima Clujului.',
+      'hero-btn-order': 'Comandă acum',
+      'hero-btn-menu': 'Vezi meniul',
+      'hero-rating': '4.9 / 5 pe Google',
+      'hero-locations': 'Peste 12 locații',
+      'hero-badge-label': '★ Meniul zilei',
+      'hero-badge-text': 'Burger &amp; cartofi — doar azi 39 lei',
+      'hero-delivery-label': 'Livrare în',
+      'promo1-chip': '~ rapid la tine ~',
+      'promo1-p': 'Comandă favoritele tale şi le aducem fierbinți, în 30 de minute.',
+      'promo1-btn': 'Comandă online',
+      'promo2-chip': '~ momente împreună ~',
+      'promo2-h3': 'EȘTI<br/>acolo cu <em class="not-italic underline-curl">familia</em>',
+      'promo2-p': 'Meniuri pentru cei mici, spațiu prietenos şi gustul pe care-l ştie toată familia.',
+      'promo2-btn': 'Rezervă o masă',
+      'about-chip': '~ de peste 20 de ani ~',
+      'about-h2': 'Locul preferat<br/>al <span class="text-[var(--brand)]">clujenilor</span>.',
+      'about-p': 'Your Restaurant înseamnă mese pline, prieteni la pahar şi rețete duse mai departe din generație în generație. Treci pe la noi — te aşteaptă mereu un loc cald.',
+      'about-stat1': 'Locații în Cluj',
+      'about-stat2': 'Clienți / an',
+      'about-stat3': 'Rating Google',
+      'book-chip': '~ simplu &amp; rapid ~',
+      'book-h2': 'Rezervă<br/><span class="text-[var(--brand)]">online.</span>',
+      'book-p': 'Alege restaurantul, ziua şi ora — îți confirmăm masa în câteva secunde.',
+      'book-btn': 'Rezervă acum',
+      'cal-pick-day': 'Alege ziua',
+      'rev-chip': '~ ce spun clienții ~',
+      'rev-h2': 'Recenzii <span class="text-[var(--brand)]">clienți</span>.',
+      'rev1-q': '„Mâncare excelentă, atmosferă de casă. Ne întoarcem de fiecare dată cu plăcere.”',
+      'rev2-q': '„Cele mai bune sarmale din Cluj, fără doar şi poate. Servire prietenoase şi rapidă.”',
+      'rev3-q': '„Am organizat botezul aici şi a fost perfect. Mulțumim echipei Your Restaurant!”',
+      'sponsors-label': 'Parteneri &amp; sponsori',
+      'footer-tagline': 'Locul preferat al clujenilor. Bucate gătite cu grijă, în inima oraşului.',
+      'footer-link-about': 'Despre noi',
+      'footer-link-restaurants': 'Restaurante',
+      'footer-link-careers': 'Cariere',
+      'footer-col2-title': 'Servicii',
+      'footer-link-order': 'Comandă online',
+      'footer-link-reservations': 'Rezervări',
+      'footer-link-events': 'Evenimente',
+      'footer-copyright': '© 2026 Your Restaurant. Toate drepturile rezervate.',
+      'footer-terms': 'Termeni',
+      'footer-privacy': 'Confidențialitate'
+    },
+    en: {
+      months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+      'bar-hours': 'Mon–Sun: 09:00 – 23:00',
+      'bar-contact': 'Contact',
+      'bar-careers': 'Careers',
+      'nav-home': 'Home',
+      'nav-menu': 'Menu',
+      'nav-reservations': 'Reservations',
+      'nav-order': 'Order Online',
+      'hero-chip': '~ fresh &amp; delicious ~',
+      'hero-h1': 'We satisfy<br/>all your <span class="text-[var(--brand)] italic">cravings!</span>',
+      'hero-p': 'From breakfast to late-night dinner — meals made with care, local ingredients and the taste of home, in the heart of Cluj.',
+      'hero-btn-order': 'Order Now',
+      'hero-btn-menu': 'See the Menu',
+      'hero-rating': '4.9 / 5 on Google',
+      'hero-locations': 'Over 12 locations',
+      'hero-badge-label': '★ Today\'s Special',
+      'hero-badge-text': 'Burger &amp; fries — today only 39 lei',
+      'hero-delivery-label': 'Delivered in',
+      'promo1-chip': '~ fast to your door ~',
+      'promo1-p': 'Order your favourites and we\'ll bring them piping hot in 30 minutes.',
+      'promo1-btn': 'Order Online',
+      'promo2-chip': '~ moments together ~',
+      'promo2-h3': 'YOU\'RE<br/>there with <em class="not-italic underline-curl">family</em>',
+      'promo2-p': 'Kids\' menus, a family-friendly space and the taste the whole family loves.',
+      'promo2-btn': 'Book a Table',
+      'about-chip': '~ for over 20 years ~',
+      'about-h2': 'Cluj\'s favourite<br/><span class="text-[var(--brand)]">dining spot</span>.',
+      'about-p': 'Your Restaurant means full tables, great friends and recipes passed down through generations. Come visit us — there\'s always a warm seat waiting.',
+      'about-stat1': 'Locations in Cluj',
+      'about-stat2': 'Customers / year',
+      'about-stat3': 'Google Rating',
+      'book-chip': '~ simple &amp; fast ~',
+      'book-h2': 'Book<br/><span class="text-[var(--brand)]">online.</span>',
+      'book-p': 'Choose your restaurant, day and time — we\'ll confirm your table in seconds.',
+      'book-btn': 'Book Now',
+      'cal-pick-day': 'Pick a day',
+      'rev-chip': '~ what our guests say ~',
+      'rev-h2': 'Customer <span class="text-[var(--brand)]">Reviews</span>.',
+      'rev1-q': '"Excellent food and a homely atmosphere. We come back every time with great pleasure."',
+      'rev2-q': '"The best stuffed cabbage in Cluj, hands down. Friendly and speedy service."',
+      'rev3-q': '"We held our christening here and it was perfect. Thank you to the whole Your Restaurant team!"',
+      'sponsors-label': 'Partners &amp; Sponsors',
+      'footer-tagline': 'Cluj\'s favourite spot. Meals made with care, in the heart of the city.',
+      'footer-link-about': 'About Us',
+      'footer-link-restaurants': 'Restaurants',
+      'footer-link-careers': 'Careers',
+      'footer-col2-title': 'Services',
+      'footer-link-order': 'Order Online',
+      'footer-link-reservations': 'Reservations',
+      'footer-link-events': 'Events',
+      'footer-copyright': '© 2026 Your Restaurant. All rights reserved.',
+      'footer-terms': 'Terms',
+      'footer-privacy': 'Privacy'
+    }
+  };
+
+  var currentLang = 'ro';
+  var cal = {year:2026, month:4, selectedDay:5};
+
+  function daysInMonth(y,m){return new Date(y,m+1,0).getDate();}
+  function firstWeekday(y,m){var d=new Date(y,m,1).getDay();return d===0?6:d-1;}
+
+  function renderCal(){
+    var label=document.getElementById('cal-month-label');
+    var grid=document.getElementById('cal-grid');
+    if(!label||!grid)return;
+    label.textContent=T[currentLang].months[cal.month]+' '+cal.year;
+    var dim=daysInMonth(cal.year,cal.month);
+    var fw=firstWeekday(cal.year,cal.month);
+    var prevDim=daysInMonth(cal.year,cal.month===0?11:cal.month-1);
+    var html='';
+    for(var i=fw-1;i>=0;i--) html+='<div class="calendar-day muted">'+(prevDim-i)+'</div>';
+    for(var d=1;d<=dim;d++){
+      html+='<div class="'+(d===cal.selectedDay?'calendar-day active':'calendar-day')+'" data-day="'+d+'">'+d+'</div>';
+    }
+    grid.innerHTML=html;
+    grid.querySelectorAll('[data-day]').forEach(function(el){
+      el.addEventListener('click',function(){
+        cal.selectedDay=parseInt(this.getAttribute('data-day'));
+        renderCal();
+      });
+    });
+  }
+
+  document.getElementById('cal-prev').addEventListener('click',function(){
+    cal.month--; if(cal.month<0){cal.month=11;cal.year--;} cal.selectedDay=null; renderCal();
+  });
+  document.getElementById('cal-next').addEventListener('click',function(){
+    cal.month++; if(cal.month>11){cal.month=0;cal.year++;} cal.selectedDay=null; renderCal();
+  });
+
+  renderCal();
+
+  // Custom dropdowns
+  document.querySelectorAll('.cs-trigger').forEach(function(t){
+    t.addEventListener('click',function(e){
+      e.stopPropagation();
+      var p=this.closest('.custom-select'), open=p.classList.contains('open');
+      document.querySelectorAll('.custom-select').forEach(function(s){s.classList.remove('open');});
+      if(!open) p.classList.add('open');
+    });
+  });
+  document.querySelectorAll('.cs-option').forEach(function(o){
+    o.addEventListener('click',function(e){
+      e.stopPropagation();
+      var p=this.closest('.custom-select');
+      p.querySelectorAll('.cs-option').forEach(function(x){x.classList.remove('cs-active');});
+      this.classList.add('cs-active');
+      p.querySelector('.cs-label').textContent=this.textContent;
+      p.classList.remove('open');
+    });
+  });
+  document.addEventListener('click',function(){
+    document.querySelectorAll('.custom-select').forEach(function(s){s.classList.remove('open');});
+  });
+
+  // Language switcher
+  function setLang(lang){
+    currentLang=lang;
+    document.documentElement.lang=lang;
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var val=T[lang][el.getAttribute('data-i18n')];
+      if(val!==undefined) el.innerHTML=val;
+    });
+    renderCal();
+    var ro=document.getElementById('lang-ro'), en=document.getElementById('lang-en');
+    if(lang==='ro'){
+      ro.classList.add('active-lang'); ro.classList.remove('opacity-50');
+      en.classList.remove('active-lang'); en.classList.add('opacity-50');
+    } else {
+      en.classList.add('active-lang'); en.classList.remove('opacity-50');
+      ro.classList.remove('active-lang'); ro.classList.add('opacity-50');
+    }
+  }
+
+  document.getElementById('lang-ro').addEventListener('click',function(){setLang('ro');});
+  document.getElementById('lang-en').addEventListener('click',function(){setLang('en');});
+})();
+</script>
 </body>
 </html>
