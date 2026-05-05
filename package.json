@@ -1,0 +1,7 @@
+{
+  "name": "web-money",
+  "type": "module",
+  "dependencies": {
+    "puppeteer": "^22.0.0"
+  }
+}
