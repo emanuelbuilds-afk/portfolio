@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Servicii & Prețuri | Andrada Jovrea Nail Art</title>
+<meta name="description" content="Servicii și prețuri Andrada Jovrea Nail Art - manichiură, construcție, gel și pedichiură în Cluj-Napoca." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: { gold:'#d98f9c', goldlight:'#cf8290', softgold:'#b89256', ink:'#3a322e', cream:'#faf6f1' },
+      fontFamily: { serif:['"Playfair Display"','serif'], sans:['Jost','sans-serif'], script:['"Pinyon Script"','cursive'] },
+    },
+  },
+};
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body {
+    font-family:'Jost',sans-serif; color:#4a423c;
+    background:
+      linear-gradient(rgba(250,246,241,0.30), rgba(250,246,241,0.30)),
+      url('assets/other%20background.png') center / cover fixed no-repeat;
+  }
+  h1,h2,h3,h4 { font-family:'Playfair Display',serif; }
+  .glass {
+    background:rgba(255,255,255,0.58);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,0.65);
+  }
+  .card-shadow { box-shadow: 0 18px 44px -22px rgba(150,90,100,0.38); }
+  .gold-line::after { content:""; display:block; width:64px; height:2px; background:#d98f9c; margin-top:14px; }
+  .nav-link { position:relative; }
+  .nav-link::after { content:""; position:absolute; left:0; bottom:-4px; width:0; height:1px; background:#d98f9c; transition:width .25s ease; }
+  .nav-link:hover::after, .nav-link.active::after { width:100%; }
+  .btn-solid { transition:background-color .25s ease, transform .15s ease; }
+  .btn-solid:hover { background:#c2737f; }
+  .btn-solid:active { transform:translateY(1px); }
+  .btn-outline { transition:background-color .25s ease, color .25s ease, transform .15s ease; }
+  .btn-outline:hover { background:#d98f9c; color:#fff; }
+  .btn-outline:active { transform:translateY(1px); }
+  .price-item { border-bottom:1px dashed #ecd6da; }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="glass sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-5 lg:px-8 flex items-center justify-between h-20">
+    <a href="index.html" class="flex items-center gap-3 shrink-0">
+      <span class="font-script text-gold text-[2.7rem] leading-[0.7]">Aj</span>
+      <span class="leading-tight border-l border-ink/15 pl-3 hidden sm:block">
+        <span class="block font-serif text-ink tracking-[0.2em] text-[12px]">ANDRADA JOVREA</span>
+        <span class="block font-serif text-gold tracking-[0.38em] text-[8.5px] mt-1">NAIL ART</span>
+      </span>
+    </a>
+    <nav class="hidden lg:flex items-center gap-7 text-[13px] tracking-wide text-ink/75 font-medium uppercase">
+      <a href="index.html" class="nav-link" data-en="Home">Acasă</a>
+      <a href="about.html" class="nav-link" data-en="About">Despre</a>
+      <a href="services.html" class="nav-link active text-ink" data-en="Services">Servicii</a>
+      <a href="gallery.html" class="nav-link" data-en="Gallery">Galerie</a>
+      <a href="contact.html" class="nav-link" data-en="Contact">Contact</a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <button data-lang-btn class="text-ink/75 border border-ink/25 rounded-full px-3 py-1 text-xs tracking-widest hover:border-gold hover:text-gold transition">EN</button>
+      <a href="tel:0757521350" class="btn-solid hidden lg:inline-block bg-gold text-white tracking-[0.18em] text-[11px] uppercase px-5 py-2.5 rounded-full" data-en="Book">Programează</a>
+      <button id="menuBtn" class="lg:hidden text-ink p-2" aria-label="Meniu">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobileNav" class="hidden lg:hidden border-t border-ink/10 px-5 pb-5 bg-white/80">
+    <nav class="flex flex-col gap-3 pt-3 text-sm uppercase tracking-wide text-ink/80">
+      <a href="index.html" data-en="Home">Acasă</a>
+      <a href="about.html" data-en="About">Despre</a>
+      <a href="services.html" class="text-gold" data-en="Services">Servicii</a>
+      <a href="gallery.html" data-en="Gallery">Galerie</a>
+      <a href="contact.html" data-en="Contact">Contact</a>
+      <a href="tel:0757521350" class="text-gold font-medium" data-en="Book an appointment">Programează</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== PAGE BANNER ===== -->
+<section class="pt-12 lg:pt-16">
+  <div class="glass card-shadow rounded-3xl max-w-7xl mx-auto px-7 py-12 lg:px-12 lg:py-16">
+    <h1 class="text-ink font-serif text-5xl md:text-6xl" data-en="Services">Servicii</h1>
+    <p class="text-ink/55 text-[13px] tracking-[0.25em] uppercase mt-4">
+      <a href="index.html" class="hover:text-gold" data-en="Home">Acasă</a> &nbsp;/&nbsp; <span data-en="Services">Servicii</span>
+    </p>
+  </div>
+</section>
+
+<!-- ===== INTRO ===== -->
+<section class="pt-12 lg:pt-16 pb-4">
+  <div class="glass card-shadow rounded-3xl max-w-3xl mx-auto px-8 py-10 text-center">
+    <p class="text-gold tracking-[0.35em] text-xs uppercase" data-en="Price list">Listă de prețuri</p>
+    <h2 class="font-serif text-4xl md:text-5xl mt-3 text-ink" data-en="Services and prices">Servicii și prețuri</h2>
+    <p class="mt-6 text-[15px] leading-[1.8] text-ink/70" data-en="Prices may vary depending on length, condition and the chosen design. The duration shown is the average time for each service.">Prețurile pot varia în funcție de lungime, starea unghiilor și modelul ales. Durata afișată este timpul mediu pentru fiecare serviciu.</p>
+  </div>
+</section>
+
+<!-- ===== PRICE GROUPS ===== -->
+<section class="py-12 lg:py-16">
+  <div class="max-w-6xl mx-auto px-5 lg:px-8 space-y-12">
+
+    <!-- Unghii cu gel -->
+    <div class="bg-white/90 border border-white/70 card-shadow rounded-3xl p-7 lg:p-12 grid lg:grid-cols-[1.4fr_1fr] gap-10 lg:gap-14 items-start">
+      <div>
+        <h3 class="font-serif text-3xl gold-line text-ink" data-en="Gel nails">Unghii cu gel</h3>
+        <div class="mt-8 space-y-5">
+
+          <div class="price-item pb-5">
+            <div class="flex justify-between gap-4 items-baseline">
+              <h4 class="font-serif text-xl text-ink" data-en="Simple manicure">Manichiură simplă</h4>
+              <span class="text-gold font-medium whitespace-nowrap">100 lei</span>
+            </div>
+            <p class="text-[12px] tracking-wide text-ink/40 uppercase mt-1">30 min</p>
+            <p class="text-[14px] text-ink/55 mt-2 leading-relaxed" data-en="Shaping the nail, styling the cuticle with the bit and nippers.">Dat formă unghiei, stilizarea cuticulei cu bitul și forfecuța.</p>
+          </div>
+
+          <div class="price-item pb-5">
+            <div class="flex justify-between gap-4 items-baseline">
+              <h4 class="font-serif text-xl text-ink" data-en="Semi-permanent manicure / maintenance">Manichiură semipermanentă / întreținere</h4>
+              <span class="text-gold font-medium whitespace-nowrap">180 lei</span>
+            </div>
+            <p class="text-[12px] tracking-wide text-ink/40 uppercase mt-1">2 h</p>
+            <p class="text-[14px] text-ink/55 mt-2 leading-relaxed" data-en="Removal of old product if needed, cuticle styling, application of semi-permanent base and color.">Îndepărtare material vechi dacă e cazul, stilizare cuticulă, aplicare bază semipermanentă și culoare.</p>
+          </div>
+
+          <div class="price-item pb-5">
+            <div class="flex justify-between gap-4 items-baseline">
+              <h4 class="font-serif text-xl text-ink" data-en="Gel on natural nail / gel maintenance">Gel pe unghia naturală / întreținere gel</h4>
+              <span class="text-gold font-medium whitespace-nowrap">200 lei</span>
+            </div>
+            <p class="text-[12px] tracking-wide text-ink/40 uppercase mt-1">2 h 30 min</p>
+            <p class="text-[14px] text-ink/55 mt-2 leading-relaxed" data-en="Removal of old product if needed, cuticle styling, gel application + color or design.">Îndepărtarea materialului vechi dacă e cazul, stilizarea cuticulei, aplicare gel + culoare sau model.</p>
+          </div>
+
+          <div class="price-item pb-5">
+            <div class="flex justify-between gap-4 items-baseline">
+              <h4 class="font-serif text-xl text-ink" data-en="Nail extensions">Construcție</h4>
+              <span class="text-gold font-medium whitespace-nowrap">300 lei</span>
+            </div>
+            <p class="text-[12px] tracking-wide text-ink/40 uppercase mt-1">3 h</p>
+            <p class="text-[14px] text-ink/55 mt-2 leading-relaxed" data-en="Nail preparation, cuticle styling, extension on a form or tips + color, design.">Pregătirea unghiei, stilizarea cuticulei, construcția pe șablon sau tips + culoare, model.</p>
+          </div>
+
+          <div class="price-item pb-5">
+            <div class="flex justify-between gap-4 items-baseline">
+              <h4 class="font-serif text-xl text-ink" data-en="Slim nail extensions">Construcție slim</h4>
+              <span class="text-gold font-medium whitespace-nowrap">300 - 350 lei</span>
+            </div>
+            <p class="text-[12px] tracking-wide text-ink/40 uppercase mt-1">3 h</p>
+            <p class="text-[14px] text-ink/55 mt-2 leading-relaxed" data-en="Natural nail preparation, cuticle styling, prep solutions and gel or acrygel extension using a form or tips + color or design.">Pregătirea unghiei naturale, stilizarea cuticulei, soluții de pregătire și construcția din gel sau acrygel cu ajutorul șablonului sau tips + culoare sau model.</p>
+          </div>
+
+          <div class="price-item pb-5">
+            <div class="flex justify-between gap-4 items-baseline">
+              <h4 class="font-serif text-xl text-ink" data-en="Slim maintenance">Întreținere slim</h4>
+              <span class="text-gold font-medium whitespace-nowrap">220 lei</span>
+            </div>
+            <p class="text-[12px] tracking-wide text-ink/40 uppercase mt-1">2 h</p>
+            <p class="text-[14px] text-ink/55 mt-2 leading-relaxed" data-en="Removal of old product, cuticle styling, acrygel applied freehand or with tips + color or design.">Îndepărtarea materialului vechi, stilizare cuticulă, aplicat acrygel cu mâna liberă sau tips + culoare sau model.</p>
+          </div>
+
+          <div class="pb-1">
+            <div class="flex justify-between gap-4 items-baseline">
+              <h4 class="font-serif text-xl text-ink">Babyboomer / French</h4>
+              <span class="text-gold font-medium whitespace-nowrap">220 lei</span>
+            </div>
+            <p class="text-[12px] tracking-wide text-ink/40 uppercase mt-1">2 h</p>
+            <p class="text-[14px] text-ink/55 mt-2 leading-relaxed" data-en="Babyboomer or French design on any type of nail (semi-permanent, gel, acrygel).">Model de babyboomer sau french pe orice tip de unghii (semipermanentă, gel, acrygel).</p>
+          </div>
+
+        </div>
+      </div>
+      <div class="grid gap-4 lg:sticky lg:top-24">
+        <img src="assets/image%20copy%202.png" alt="Unghii cu gel" class="w-full rounded-3xl card-shadow object-cover aspect-[4/5]" />
+        <img src="assets/image%20copy%204.png" alt="Model unghii" class="w-full rounded-3xl card-shadow object-cover aspect-[4/3] hidden lg:block" />
+      </div>
+    </div>
+
+    <!-- Pedichiura -->
+    <div class="bg-white/90 border border-white/70 card-shadow rounded-3xl p-7 lg:p-12 grid lg:grid-cols-[1fr_1.4fr] gap-10 lg:gap-14 items-start">
+      <div class="order-2 lg:order-1 grid gap-4 lg:sticky lg:top-24">
+        <img src="assets/image%20copy%206.png" alt="Pedichiură" class="w-full rounded-3xl card-shadow object-cover aspect-[4/5]" />
+      </div>
+      <div class="order-1 lg:order-2">
+        <h3 class="font-serif text-3xl gold-line text-ink" data-en="Pedicure">Pedichiură</h3>
+        <div class="mt-8 space-y-5">
+
+          <div class="price-item pb-5">
+            <div class="flex justify-between gap-4 items-baseline">
+              <h4 class="font-serif text-xl text-ink" data-en="Semi-permanent pedicure">Pedichiură semipermanentă</h4>
+              <span class="text-gold font-medium whitespace-nowrap">160 lei</span>
+            </div>
+            <p class="text-[12px] tracking-wide text-ink/40 uppercase mt-1">1 h 30 min</p>
+            <p class="text-[14px] text-ink/55 mt-2 leading-relaxed" data-en="Removal of old product or nail preparation, cuticle styling, application of semi-permanent color.">Îndepărtare material vechi sau pregătire a unghiei, stilizarea cuticulei, aplicare culoare semipermanentă.</p>
+          </div>
+
+          <div class="price-item pb-5">
+            <div class="flex justify-between gap-4 items-baseline">
+              <h4 class="font-serif text-xl text-ink" data-en="Sole pedicure">Pedichiură talpă</h4>
+              <span class="text-gold font-medium whitespace-nowrap">180 lei</span>
+            </div>
+            <p class="text-[12px] tracking-wide text-ink/40 uppercase mt-1">2 h</p>
+            <p class="text-[14px] text-ink/55 mt-2 leading-relaxed" data-en="Cuticle styling, removal of calluses using keratolytic solutions. Dry pedicure.">Stilizare cuticulă, îndepărtarea bătăturilor cu ajutorul soluțiilor keratolitice. Pedichiură uscată.</p>
+          </div>
+
+          <div class="pb-1">
+            <div class="flex justify-between gap-4 items-baseline">
+              <h4 class="font-serif text-xl text-ink" data-en="Full pedicure (permanent + sole)">Pedichiură totală (permanentă + talpă)</h4>
+              <span class="text-gold font-medium whitespace-nowrap">260 lei</span>
+            </div>
+            <p class="text-[12px] tracking-wide text-ink/40 uppercase mt-1">2 h 30 min</p>
+            <p class="text-[14px] text-ink/55 mt-2 leading-relaxed" data-en="Keratolytic solutions are applied to the sole and absorbed, the nail is prepped and the cuticle styled, calluses are cleaned and semi-permanent polish is applied.">Se aplică soluțiile keratolitice pe talpă și se infiltrează, se pregătește unghia și se stilizează cuticula, se curăță bătăturile și se ojează cu ojă semipermanentă.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Igienizare -->
+    <div class="bg-white/90 border border-white/70 card-shadow rounded-3xl p-8 lg:p-12">
+      <h3 class="font-serif text-3xl gold-line text-ink" data-en="Treatment">Tratament</h3>
+      <div class="mt-7 flex justify-between gap-4 items-baseline">
+        <h4 class="font-serif text-xl text-ink" data-en="Nail hygiene">Igienizare unghie</h4>
+        <span class="text-gold font-medium whitespace-nowrap">100 lei</span>
+      </div>
+      <p class="text-[12px] tracking-wide text-ink/40 uppercase mt-1">30 min</p>
+      <p class="text-[14px] text-ink/55 mt-2 leading-relaxed" data-en="Removal of the affected nail (preparation for treatment).">Îndepărtarea unghiei bolnave (pregătire pentru tratament).</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="py-12 lg:py-20">
+  <div class="glass card-shadow rounded-3xl max-w-3xl mx-auto px-7 py-12 lg:px-10 text-center">
+    <h2 class="font-serif text-3xl md:text-4xl text-ink" data-en="Want to book an appointment?">Vrei să te programezi?</h2>
+    <p class="text-ink/60 mt-4 text-[15px]" data-en="Luni - Duminică, 9:00 - 18:00. Appointments by phone or MERO.">Luni - Duminică, 9:00 - 18:00. Programări prin telefon sau MERO.</p>
+    <a href="tel:0757521350" class="btn-solid inline-block mt-7 bg-gold text-white tracking-[0.2em] text-xs uppercase px-9 py-4 rounded-full" data-en="Call 0757 521 350">Sună 0757 521 350</a>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="glass mt-8 pt-16 pb-8">
+  <div class="max-w-7xl mx-auto px-5 lg:px-8 text-center">
+    <a href="index.html" class="inline-flex flex-col items-center">
+      <span class="font-script text-gold text-6xl leading-none">Aj</span>
+      <span class="font-serif text-ink tracking-[0.3em] text-sm mt-2">ANDRADA JOVREA</span>
+      <span class="font-serif text-gold tracking-[0.45em] text-[10px] mt-1">NAIL ART</span>
+    </a>
+    <div class="flex justify-center gap-4 mt-7">
+      <a href="https://www.facebook.com/AndradaJnail/" target="_blank" rel="noopener" aria-label="Facebook" class="w-10 h-10 grid place-items-center rounded-full border border-gold/60 text-gold hover:bg-gold hover:text-white transition">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 22v-9h3l1-4h-4V7c0-1 .3-2 2-2h2V1.5C18.7 1.4 17.5 1 16 1c-3 0-5 2-5 5v3H8v4h3v9h2Z"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/" target="_blank" rel="noopener" aria-label="TikTok" class="w-10 h-10 grid place-items-center rounded-full border border-gold/60 text-gold hover:bg-gold hover:text-white transition">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 3c.3 2.3 1.8 4.1 4 4.4v3.1c-1.6 0-3.1-.5-4.4-1.4v6.4a6.2 6.2 0 1 1-6.2-6.2c.3 0 .6 0 1 .1v3.2a3 3 0 1 0 2.1 2.9V3H16Z"/></svg>
+      </a>
+    </div>
+    <div class="border-t border-ink/10 mt-10 pt-6">
+      <p class="text-ink/45 text-[12px] tracking-wide">&copy; 2026 Andrada Jovrea Nail Art. <span data-en="All rights reserved.">Toate drepturile rezervate.</span></p>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== FLOATING BUTTONS ===== -->
+<div class="fixed right-0 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-[2px]">
+  <a href="index.html#booking" aria-label="Programează" class="w-12 h-12 grid place-items-center bg-gold text-white hover:bg-[#c2737f] transition rounded-l-xl">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
+  </a>
+  <a href="tel:0757521350" aria-label="Sună" class="w-12 h-12 grid place-items-center bg-gold text-white hover:bg-[#c2737f] transition rounded-l-xl">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c1 .3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z"/></svg>
+  </a>
+</div>
+
+<script>
+function ajSetLang(lang){
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-en]').forEach(function(el){
+    if (el.dataset.ro === undefined) el.dataset.ro = el.innerHTML;
+    el.innerHTML = (lang === 'en') ? el.dataset.en : el.dataset.ro;
+  });
+  document.querySelectorAll('[data-lang-btn]').forEach(function(b){
+    b.textContent = (lang === 'en') ? 'RO' : 'EN';
+  });
+  try { sessionStorage.setItem('aj-lang', lang); } catch(e){}
+}
+document.querySelectorAll('[data-lang-btn]').forEach(function(b){
+  b.addEventListener('click', function(){
+    var cur = (document.documentElement.lang === 'en') ? 'en' : 'ro';
+    ajSetLang(cur === 'en' ? 'ro' : 'en');
+  });
+});
+(function(){
+  var saved = 'ro';
+  try { saved = sessionStorage.getItem('aj-lang') || 'ro'; } catch(e){}
+  ajSetLang(saved);
+})();
+document.getElementById('menuBtn').addEventListener('click', function(){
+  document.getElementById('mobileNav').classList.toggle('hidden');
+});
+</script>
+</body>
+</html>
